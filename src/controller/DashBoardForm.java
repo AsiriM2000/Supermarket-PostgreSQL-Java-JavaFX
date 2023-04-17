@@ -20,7 +20,8 @@ public class DashBoardForm {
         setUi("updateCustomer");
     }
 
-    public void deleteCustomerOnAction(ActionEvent actionEvent) {
+    public void deleteCustomerOnAction(ActionEvent actionEvent) throws IOException {
+        setUi("deleteCustomer");
     }
 
     public void loadAllCustomersOnAction(ActionEvent actionEvent) throws IOException {

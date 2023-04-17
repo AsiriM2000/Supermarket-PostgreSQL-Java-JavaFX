@@ -13,7 +13,8 @@ public class DashBoardForm {
         setUi("saveCustomer");
     }
 
-    public void searchCustomerOnAction(ActionEvent actionEvent) {
+    public void searchCustomerOnAction(ActionEvent actionEvent) throws IOException {
+        setUi("searchCustomer");
     }
 
     public void updateCustomerOnAction(ActionEvent actionEvent) throws IOException {

@@ -22,7 +22,8 @@ public class DashBoardForm {
     public void deleteCustomerOnAction(ActionEvent actionEvent) {
     }
 
-    public void loadAllCustomersOnAction(ActionEvent actionEvent) {
+    public void loadAllCustomersOnAction(ActionEvent actionEvent) throws IOException {
+        setUi("loadAll");
     }
 
     public void placeOrderOnAction(ActionEvent actionEvent) {

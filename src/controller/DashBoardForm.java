@@ -29,7 +29,8 @@ public class DashBoardForm {
         setUi("loadAll");
     }
 
-    public void placeOrderOnAction(ActionEvent actionEvent) {
+    public void placeOrderOnAction(ActionEvent actionEvent) throws IOException {
+        setUi("placeOrder");
     }
 
     private void setUi(String URI) throws IOException {

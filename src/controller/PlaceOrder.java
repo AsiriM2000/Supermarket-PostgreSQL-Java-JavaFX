@@ -1,5 +1,6 @@
 package controller;
 
+import db.DBConnection;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -14,12 +15,19 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import model.Customer;
 import model.Item;
+import model.Disposal;
+import model.OrderDetails;
+import util.SQLUtil;
 import views.tm.CartTM;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.Date;
 
 public class PlaceOrder {
@@ -44,7 +52,7 @@ public class PlaceOrder {
     public Label lblTotalCost;
 
     public void initialize() {
-        colCode.setCellValueFactory(new PropertyValueFactory<>("code"));
+        colCode.setCellValueFactory(new PropertyValueFactory<>("itemCode"));
         colDescription.setCellValueFactory(new PropertyValueFactory<>("description"));
         colUnitPrice.setCellValueFactory(new PropertyValueFactory<>("unitPrice"));
         colQty.setCellValueFactory(new PropertyValueFactory<>("qty"));
@@ -169,7 +177,7 @@ public class PlaceOrder {
             CartTM tm = new CartTM(
                     cmbItemCode.getValue(),
                     txtDescription.getText(),
-                    unitPrice,
+                    v,
                     qty,
                     totalCost,
                     btn
@@ -186,7 +194,54 @@ public class PlaceOrder {
         tblCart.refresh();
     }
 
-    public void placeOrderOnAction(ActionEvent actionEvent) {
+    public void placeOrderOnAction(ActionEvent actionEvent) throws SQLException, ClassNotFoundException {
+        String date = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
+        Disposal disposal = new Disposal(
+                getOrderId(),
+                date,
+                cmbCustomerId.getValue()
+
+        );
+        ArrayList<OrderDetails> details = new ArrayList<>();
+        for (CartTM tm : tmList
+        ) {
+            details.add(
+                    new OrderDetails(
+                            getOrderId(),
+                            tm.getItemCode(),
+                            tm.getQty(),
+                            tm.getUnitPrice()
+                    )
+            );
+        }
+
+        //----------------------------
+
+        Connection connection= null;
+
+        try {
+            connection= DBConnection.getInstance().getConnection();
+            connection.setAutoCommit(false);
+            boolean isOrderSaved = new DisposalCrud().saveOrder(disposal);
+            if (isOrderSaved) {
+                boolean isDetailsSaved=new DisposalCrud().saveOrderDetails(details);
+                if (isDetailsSaved){
+                    connection.commit();
+                    new Alert(Alert.AlertType.CONFIRMATION,"Saved!").show();
+                }else{
+                    connection.rollback();
+                    new Alert(Alert.AlertType.ERROR,"Error!").show();
+                }
+            }else{
+                connection.rollback();
+                new Alert(Alert.AlertType.ERROR,"Error!").show();
+            }
+        } catch (SQLException | ClassNotFoundException e) {
+            System.out.println(e);
+        }finally {
+            connection.setAutoCommit(true);
+        }
+
     }
 
     public void openNewCustomerOnAction(ActionEvent actionEvent) throws IOException {
@@ -197,7 +252,7 @@ public class PlaceOrder {
     private CartTM isExists(String itemCode) {
         for (CartTM tm : tmList
         ) {
-            if (tm.getCode().equals(itemCode)) {
+            if (tm.getItemCode().equals(itemCode)) {
                 return tm;
             }
         }
@@ -210,5 +265,21 @@ public class PlaceOrder {
             total += tm.getTotalCost();
         }
         lblTotalCost.setText(String.valueOf(total));
+    }
+    public String getOrderId() throws SQLException, ClassNotFoundException {
+        ResultSet pet = SQLUtil.executeQuery("SELECT orderId FROM Disposal ORDER BY orderId DESC LIMIT 1");
+        if (pet.next()) {
+            String r = pet.getString("orderId");
+            int co = r.length();
+            String txt = r.substring(0, 3);
+            String num = r.substring(3, co);
+            int n = Integer.parseInt(num);
+            n++;
+            String snum = Integer.toString(n);
+            String fxt = txt + snum;
+            return fxt;
+        }else {
+            return "D001";
+        }
     }
 }

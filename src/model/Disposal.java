@@ -1,0 +1,50 @@
+package model;
+
+public class Disposal {
+    private String orderId;
+    private String orderDate;
+    private String customerId;
+
+
+    public Disposal() {
+    }
+
+    public Disposal(String orderId, String orderDate, String customerId) {
+        this.orderId = orderId;
+        this.orderDate = orderDate;
+        this.customerId = customerId;
+    }
+
+    public String getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(String orderId) {
+        this.orderId = orderId;
+    }
+
+    public String getOrderDate() {
+        return orderDate;
+    }
+
+    public void setOrderDate(String orderDate) {
+        this.orderDate = orderDate;
+    }
+
+    public String getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(String customerId) {
+        this.customerId = customerId;
+    }
+
+    @Override
+    public String toString() {
+        return "Order{" +
+                "orderId='" + orderId + '\'' +
+                ", orderDate='" + orderDate + '\'' +
+                ", customerId='" + customerId + '\'' +
+                '}';
+    }
+}

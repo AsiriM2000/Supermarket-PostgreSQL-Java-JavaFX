@@ -3,15 +3,18 @@ package views.tm;
 import javafx.scene.control.Button;
 
 public class CartTM {
-    private String code;
+    private String itemCode;
     private String description;
-    private String unitPrice;
+    private double unitPrice;
     private int qty;
     private double totalCost;
     private Button btn;
 
-    public CartTM(String code, String description, String unitPrice, int qty, double totalCost, Button btn) {
-        this.code = code;
+    public CartTM() {
+    }
+
+    public CartTM(String itemCode, String description, double unitPrice, int qty, double totalCost, Button btn) {
+        this.itemCode = itemCode;
         this.description = description;
         this.unitPrice = unitPrice;
         this.qty = qty;
@@ -19,15 +22,12 @@ public class CartTM {
         this.btn = btn;
     }
 
-    public CartTM() {
+    public String getItemCode() {
+        return itemCode;
     }
 
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
+    public void setItemCode(String itemCode) {
+        this.itemCode = itemCode;
     }
 
     public String getDescription() {
@@ -38,11 +38,11 @@ public class CartTM {
         this.description = description;
     }
 
-    public String getUnitPrice() {
+    public double getUnitPrice() {
         return unitPrice;
     }
 
-    public void setUnitPrice(String unitPrice) {
+    public void setUnitPrice(double unitPrice) {
         this.unitPrice = unitPrice;
     }
 
@@ -73,11 +73,11 @@ public class CartTM {
     @Override
     public String toString() {
         return "CartTM{" +
-                "code='" + code + '\'' +
+                "itemCode='" + itemCode + '\'' +
                 ", description='" + description + '\'' +
-                ", unitPrice='" + unitPrice + '\'' +
+                ", unitPrice=" + unitPrice +
                 ", qty=" + qty +
-                ", totalCost='" + totalCost + '\'' +
+                ", totalCost=" + totalCost +
                 ", btn=" + btn +
                 '}';
     }

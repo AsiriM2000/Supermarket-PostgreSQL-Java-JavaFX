@@ -23,8 +23,8 @@ public class ItemCrud {
             return new Item(
                     result.getString(1),
                     result.getString(2),
-                    result.getString(3),
-                    result.getInt(4)
+                    result.getString(4),
+                    result.getInt(3)
             );
         }
         return null;

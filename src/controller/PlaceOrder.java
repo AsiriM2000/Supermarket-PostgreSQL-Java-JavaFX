@@ -82,8 +82,8 @@ public class PlaceOrder {
             Item i = ItemCrud.getItem(selectedItemCode);
             if (i != null) {
                 txtDescription.setText(i.getDescription());
-                txtUnitPrice.setText(i.getUnitPrice());
                 txtQtyOnHand.setText(String.valueOf(i.getQtyOnHand()));
+                txtUnitPrice.setText(i.getUnitPrice());
             } else {
                 new Alert(Alert.AlertType.WARNING, "Empty Result").show();
             }
@@ -192,6 +192,7 @@ public class PlaceOrder {
             tblCart.setItems(tmList);
         }
         tblCart.refresh();
+        calculateTotal();
     }
 
     public void placeOrderOnAction(ActionEvent actionEvent) throws SQLException, ClassNotFoundException {
